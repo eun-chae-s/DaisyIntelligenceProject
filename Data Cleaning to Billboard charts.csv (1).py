@@ -3,6 +3,7 @@
 
 # In[30]:
 
+# ## Cleaning dataset of Billboard Hot 100 charts
 
 import pandas as pd
 
@@ -15,10 +16,11 @@ billboard = pd.read_csv('./charts.csv')
 
 # In[32]:
 
-
+# Filter the data
 billboard_filtered = bilboard.loc[bilboard['date'] >= '1960-01-01']
 billboard_filtered['popularity-weeks'] = 'NA'
 
+# Grouping popularity based on the number of weeks on board
 billboard_filtered.loc[bilboard_filtered['weeks-on-board'] <= 30, 'popularity-weeks'] = 'low'
 billboard_filtered.loc[(31 <= bilboard_filtered['weeks-on-board']) & (bilboard_filtered['weeks-on-board'] <= 60), 'popularity-weeks'] = 'medium'
 billboard_filtered.loc[(61 <= bilboard_filtered['weeks-on-board']), 'popularity-weeks'] = 'high'
