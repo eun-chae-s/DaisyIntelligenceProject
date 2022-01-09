@@ -64,6 +64,7 @@ billboard_pop
 
 from sklearn.model_selection import train_test_split
 
+# Combine the billboard data and tiktok data
 song_data = pd.DataFrame(columns=['tiktok_pop', 'billboard_pop'])
 song_data['tiktok_pop'] = tiktok_pop['popularity']
 song_data['billboard_pop'] = billboard_pop['peak-rank']
@@ -71,6 +72,7 @@ song_data['billboard_pop'] = billboard_pop['peak-rank']
 X = song_data.iloc[:, :-1].values
 y = song_data.iloc[:, 1].values
 
+# Get the training and testing dataset
 tiktok_train, tiktok_test, billboard_train, billboard_test = train_test_split(X, y, test_size=0.25, random_state=0)
 
 
@@ -79,7 +81,7 @@ tiktok_train, tiktok_test, billboard_train, billboard_test = train_test_split(X,
 
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 
-# Linear Regression
+# build Linear Regression model
 linear_regression = LinearRegression().fit(tiktok_train, billboard_train)
 print("lr.coef_: {}".format(linear_regression.coef_))
 print("lr.intercept_: {}".format(linear_regression.intercept_))
@@ -95,7 +97,7 @@ print("Test set score: {:.2f}".format(linear_regression.score(tiktok_test, billb
 # In[189]:
 
 
-# Ridge
+# build Ridge model
 
 ridge = Ridge(alpha=0.00001).fit(tiktok_train, billboard_train)
 print("Training set score: {:.2f}".format(ridge.score(tiktok_train, billboard_train)))
@@ -105,9 +107,9 @@ print("Test set score: {:.2f}".format(ridge.score(tiktok_test, billboard_test)))
 # In[190]:
 
 
-# Lasso
+# build Lasso model
 
-lasso = Lasso(alpha=0.00001).fit(tiktok_train, billboard_train)
+lasso = Lasso(alpha=10).fit(tiktok_train, billboard_train)
 print("Training set score: {:.2f}".format(lasso.score(tiktok_train, billboard_train)))
 print("Test set score: {:.2f}".format(lasso.score(tiktok_test, billboard_test)))
 
@@ -117,10 +119,11 @@ print("Test set score: {:.2f}".format(lasso.score(tiktok_test, billboard_test)))
 
 import matplotlib.pyplot as plt
 
+# Visualizing the graph between billboard peak rank and tiktok population score
 song_data.plot(x='billboard_pop', y='tiktok_pop', style='o')
 plt.title('Relationship between Tiktok population score and Billboard peak-rank')
 plt.ylabel('Tiktok population score')
-plt.xlabel('Billboard population score')
+plt.xlabel('Billboard peak-rank')
 plt.show()
 
 
@@ -128,7 +131,7 @@ plt.show()
 
 # In[194]:
 
-
+# Combine the billboard data and tiktok data
 song_data2 = pd.DataFrame(columns=['tiktok_pop', 'billboard_pop'])
 song_data2['tiktok_pop'] = tiktok_pop['danceability']
 song_data2['billboard_pop'] = billboard_pop['peak-rank']
@@ -136,12 +139,13 @@ song_data2['billboard_pop'] = billboard_pop['peak-rank']
 X2 = song_data2.iloc[:, :-1].values
 y2 = song_data2.iloc[:, 1].values
 
+# Get the training and testing dataset
 tiktok_train2, tiktok_test2, billboard_train2, billboard_test2 = train_test_split(X2, y2, test_size=0.25, random_state=0)
 
 
 # In[195]:
 
-
+# build Linear Regression model
 linear_regression2 = LinearRegression().fit(tiktok_train2, billboard_train2)
 print("lr.coef_: {}".format(linear_regression2.coef_))
 print("lr.intercept_: {}".format(linear_regression2.intercept_))
@@ -149,7 +153,7 @@ print("lr.intercept_: {}".format(linear_regression2.intercept_))
 
 # In[196]:
 
-
+# Visualizing the graph between billboard peak rank and tiktok danceability score for the tracks
 song_data2.plot(x='billboard_pop', y='tiktok_pop', style='o')
 plt.title('Relationship between Tiktok danceability score and Peak-rank of the track at Billboard Hot 100')
 plt.ylabel('Tiktok danceability score')
@@ -173,6 +177,7 @@ pip install graphviz
 from sklearn import tree
 import graphviz
 
+# create a separate data frame that combines danceability score and classifiers for the popularity (Based on the number of weeks)
 song_data3 = pd.DataFrame(columns=['tiktok_pop', 'billboard_pop'])
 song_data3['tiktok_pop'] = tiktok_pop['danceability']
 song_data3['billboard_pop'] = billboard_pop['popularity-weeks']
@@ -180,6 +185,7 @@ song_data3['billboard_pop'] = billboard_pop['popularity-weeks']
 X3 = song_data3.iloc[:, :-1].values
 y3 = song_data3.iloc[:, 1].values
 
+# build the decision tree model
 tree_classifier = tree.DecisionTreeClassifier(max_depth=10, random_state=0)
 tree_classifier = tree_classifier.fit(X3, y3)
 
@@ -194,14 +200,13 @@ plt.show()
 
 from sklearn.tree import DecisionTreeClassifier
 
+# build the decision tree model (separating from training set and testing set)
 tiktok_train3, tiktok_test3, billboard_train3, billboard_test3 = train_test_split(X3, y3, test_size=0.25, random_state=0)
 
 tree_classifier = tree_classifier.fit(tiktok_train3, billboard_train3)
 print("Accuracy on training set: {:.3f}".format(tree_classifier.score(tiktok_train3, billboard_train3)))
 print("Accuracy on test set: {:.3f}".format(tree_classifier.score(tiktok_test3, billboard_test3)))
 
-
-# In[ ]:
 
 
 
